@@ -17,6 +17,7 @@ A simple To-Do application built with Flask, a lightweight Python web framework.
    git clone https://github.com/your-username/To-do-app.git
    cd To-do-app
 2. **Set Up a Virtual Environment:**
+   ```bash
   python3 -m venv venv
   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 
