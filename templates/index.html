@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Home
+{% endblock title %}
+
+{% block body %}
+<div class="container my-3">
+    {% if current_user.is_authenticated %}
+    <div class="greeting d-flex align-items-center">
+        <img src="{{ url_for('static', filename='images/hand.png') }}" alt="Icon" class="icon">
+        <h4 class="greet ms-2">Hello, {{ current_user.username }}</h4>
+    </div>
+    {% endif %}
+    <br>
+    <div class="add-container">
+        <div class="add d-flex align-items-center">
+            <h2>Add a To-do</h2>
+            <img src="{{ url_for('static', filename='images/add.png') }}" alt="Icon" class="icon ms-2">
+        </div>
+        <br>
+        <form action="/" method="POST">
+            <div class="mb-3">
+                <strong><label for="title" class="form-label">To-do Title</label></strong>
+                <input type="text" class="form-control todo-input" name="title" id="title" aria-describedby="titleHelp" required>
+            </div>
+            <div class="mb-3">
+                <strong><label for="desc" class="form-label">To-do Description</label></strong>
+                <input type="text" class="form-control todo-input" name="desc" id="desc">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+
+<div class="container my-3">
+    <br>
+    <div class="your-container">
+        <div class="d-flex align-items-center">
+            <h2 class="your">Your To-dos</h2>
+            <img src="{{ url_for('static', filename='images/task.png') }}" alt="Icon" class="icon ms-2">
+        </div>
+        <form id="filterForm" class="d-flex mt-3" action="/filter" method="GET">
+            <select class="form-select me-2" name="filter" id="filter">
+                <option value="all">All</option>
+                <option value="due_date">Due Date</option>
+                <option value="priority">Priority</option>
+                <option value="done">Marked as Done</option>
+                <option value="not_done">Not Marked as Done</option>
+            </select>
+            <button type="submit" class="btn btn-outline-success">Filter</button>
+        </form>
+
+        <br>
+
+        {% if allTodo|length == 0 %}
+        <div class="alert alert-warning" role="alert">
+            No To-dos found. Add your first to-do now!
+        </div>
+        {% else %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">SNo</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">Due Date</th>
+                    <th scope="col">Priority</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for todo in allTodo %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ todo.title }}</td>
+                    <td>{{ todo.desc }}</td>
+                    <td>{{ todo.formatted_date() }}</td>
+                    <td>
+                        <input type="date" class="form-control due-date-input" data-id="{{ todo.sno }}" value="{{ todo.due_date.strftime('%Y-%m-%d') if todo.due_date else '' }}">
+                    </td>
+                    <td>
+                        <select class="form-select priority-select" data-id="{{ todo.sno }}">
+                            <option value="low" {% if todo.priority == 'low' %}selected{% endif %}>Low</option>
+                            <option value="medium" {% if todo.priority == 'medium' %}selected{% endif %}>Medium</option>
+                            <option value="high" {% if todo.priority == 'high' %}selected{% endif %}>High</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn {% if todo.is_done %}btn-warning{% else %}btn-outline-warning{% endif %} mark-done-btn btn-sm mx-1" data-id="{{ todo.sno }}">
+                            {% if todo.is_done %}Done{% else %}Mark as done{% endif %}
+                        </button>
+                        <a href="/update/{{ todo.sno }}" class="btn btn-outline-success btn-sm mx-1">Update</a>
+                        <a href="/delete/{{ todo.sno }}" class="btn btn-outline-danger btn-sm mx-1">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+
+    // Timeout function to hide flash messages after 4 seconds
+    setTimeout(function() {
+        var flashMessage = document.querySelector('.flash-message');
+        if (flashMessage) {
+            flashMessage.remove();
+        }
+    }, 4000); // 4000 milliseconds = 4 seconds
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const prioritySelects = document.querySelectorAll('.priority-select');
+        prioritySelects.forEach(select => {
+            select.addEventListener('change', function() {
+                const todoId = this.getAttribute('data-id');
+                const newPriority = this.value;
+                fetch(`/update_priority/${todoId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ priority: newPriority })
+                }).then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        alert('Failed to update priority');
+                    }
+                });
+            });
+        });
+
+        const dueDateInputs = document.querySelectorAll('.due-date-input');
+        dueDateInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                const todoId = this.getAttribute('data-id');
+                const newDueDate = this.value;
+                fetch(`/update_due_date/${todoId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ due_date: newDueDate })
+                }).then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        alert('Failed to update due date');
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock body %}
