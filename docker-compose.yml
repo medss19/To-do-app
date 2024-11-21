@@ -1,0 +1,18 @@
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=production
+    command: flask run --host=0.0.0.0 --port=8000
+    depends_on:
+      - db
+  db:
+    image: nouchka/sqlite:latest  # Alternatively, use a Postgres image for production
+    volumes:
+      - ./todo.db:/app/todo.db  # Maps the SQLite file to the container
