@@ -41,7 +41,7 @@ body{
     flex: 1 1 auto;
     min-height: 1px;
     padding: 1rem;
-    background-color: rgba(245, 235, 251, 0.463);
+    background-color: rgb(250 248 251 / 46%);
 }
 
 .gutters-sm {
