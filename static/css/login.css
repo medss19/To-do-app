@@ -147,18 +147,16 @@ body, html {
 }
 
 .flash-message {
-    top: 20px;
+    top: 80px; /* Position at the very top */
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1050;
-    width: 90%;
-    max-width: 500px;
-    left: 50%;
-    transform: translateX(-50%);
-    position: fixed;
-    margin: 0;
-    padding: 10px 20px;
+    z-index: 1050; /* Make sure it's above other elements */
+    width: 30%; /* Make it full width */
+    left: 400px; /* Position it to the left edge */
+    margin-left: 200px;
+    right: 0; /* Position it to the right edge */
+    position: fixed; /* Fix it at the top of the screen */
     background-color: rgba(255, 255, 255, 0.95);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
