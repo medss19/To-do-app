@@ -1,19 +1,21 @@
 body, html {
     height: 100%;
     margin: 0;
+    overflow: hidden; /* Prevent scrolling */
 }
 
 .container-login {
-    background-image: url('../images/login.png');
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 92.20%;
+    height: 100vh; /* Use viewport height */
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+    background: linear-gradient(135deg, 
+        #f5f7fa 0%,
+        #e8ecf1 50%,
+        #dde4eb 100%
+    );
 }
 
 .container-login::before {
@@ -23,35 +25,41 @@ body, html {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.3); 
+    background: linear-gradient(45deg,
+        rgba(164, 69, 178, 0.05) 0%,
+        rgba(212, 24, 114, 0.05) 50%,
+        rgba(250, 66, 153, 0.05) 100%
+    );
     z-index: 1;
 }
 
 .login-box {
-    width: 390px;
+    width: 90%;
+    max-width: 390px;
     overflow: hidden;
     position: relative;
     z-index: 2;
     opacity: 0;
-    transform: translateX(100px); /* Start 100px to the right */
+    transform: translateX(100px);
     animation: slideLeft 1s forwards;
+    margin: 20px;
 }
 
 @keyframes slideLeft {
     from {
         opacity: 0;
-        transform: translateX(100px); /* Initial state */
+        transform: translateX(100px);
     }
     to {
         opacity: 1;
-        transform: translateX(0); /* Final state */
+        transform: translateX(0);
     }
 }
 
 .login-box h2 {
     margin-bottom: 30px;
-    font-size: 28px;
-    color: #fff;
+    font-size: clamp(24px, 5vw, 28px);
+    color: #445571;
     line-height: 1.2;
     text-align: center;
     text-transform: uppercase;
@@ -60,22 +68,23 @@ body, html {
 }
 
 .wrap-input100 .icon {
-    margin-left: 20px; /* Adjust margin as needed */
-    width: 30px; /* Adjust icon width */
-    height: auto; /* Maintain aspect ratio */
+    margin-left: 10px;
+    width: 25px;
+    height: auto;
 }
 
 .login-form {
-    background-color: rgba(255, 255, 255, 0.9); 
+    background-color: rgba(255, 255, 255, 0.95);
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 10px;
 }
 
 .wrap-input100 {
     width: 100%;
     position: relative;
     border-bottom: 1px solid #e6e6e6;
-    padding: 40px 0;
+    padding: 20px 0;
     display: flex;
     align-items: center;
 }
@@ -83,60 +92,88 @@ body, html {
 .login-form .input100 {
     font-family: "Ubuntu", sans-serif;
     font-weight: 400;
-    font-size: 20px;
+    font-size: clamp(16px, 4vw, 20px);
     color: #555;
     line-height: 1.2;
-    width: calc(85% - 50px);
-    margin-left: 23px;
+    width: calc(100% - 60px);
+    margin-left: 15px;
     border: none;
     outline: none;
     border-radius: 15px;
-    height: 50px;
+    height: 45px;
     background: white;
     padding: 0px 10px;
     transition: background-color 0.4s;
 }
 
 .input100:focus {
-    background-color: rgba(255, 255, 255, 0.9); 
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 0 2px rgba(164, 69, 178, 0.1);
 }
 
 .container-login100-form-btn {
     width: 100%;
     display: flex;
-    padding: 30px;
+    padding: 20px;
     justify-content: center;
 }
 
 .btn-primary {
-    width: 29%;
+    width: auto;
+    min-width: 110px;
+    max-width: 200px;
+    padding: 0 20px;
     font-family: "Ubuntu", sans-serif;
     font-weight: 700;
-    font-size: 18px;
+    font-size: clamp(16px, 4vw, 18px);
     color: #fff;
     line-height: 1.2;
     text-transform: uppercase;
     border: none;
     justify-content: center;
     align-items: center;
-    min-width: 110px;
     height: 42px;
     border-radius: 21px;
     background: linear-gradient(to right, #a445b2, #d41872, #fa4299);
     position: relative;
     z-index: 1;
-    transition: background-color 0.4s;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .flash-message {
-    top: 80px; /* Position at the very top */
+    top: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1050; /* Make sure it's above other elements */
-    width: 30%; /* Make it full width */
-    left: 400px; /* Position it to the left edge */
-    margin-left: 200px;
-    right: 0; /* Position it to the right edge */
-    position: fixed; /* Fix it at the top of the screen */
+    z-index: 1050;
+    width: 90%;
+    max-width: 500px;
+    left: 50%;
+    transform: translateX(-50%);
+    position: fixed;
+    margin: 0;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Media Queries for smaller devices */
+@media screen and (max-width: 480px) {
+    .wrap-input100 {
+        padding: 15px 0;
+    }
+    
+    .login-form .input100 {
+        margin-left: 10px;
+    }
+    
+    .container-login100-form-btn {
+        padding: 15px;
+    }
 }

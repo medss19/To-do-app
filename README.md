@@ -21,4 +21,3 @@ A simple To-Do application built with Flask, a lightweight Python web framework.
   python3 -m venv venv
   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 
-Hi I am Medha
